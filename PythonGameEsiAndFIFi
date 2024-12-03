@@ -1,0 +1,146 @@
+import random
+
+# Defines playerp and compp as global variables
+global playerp
+global compp
+global rounds
+global playerrod
+global comprod
+
+# Just to assign initial values
+ans = 0
+playerp = 0
+compp = 0
+rounds = 0
+playerrod = 0
+comprod = 0
+
+############################################
+
+print('Hi, Welcome to the Morra Game')
+
+# Menu function
+def menu():
+    print("1. Rules")
+    print("2. Play")
+    print("3. View Scores")
+    print("4. Exit")
+
+#############################################
+
+# Main game function
+def command(ans):
+    # Accessing global variables
+    global playerp
+    global compp
+    global rounds
+    global playerrod
+    global comprod
+
+    if ans == 1:
+        # Shows rules
+        print("Rules")
+        print("""Here how to play!!!\nIn each round of the game, the players will simultaneously hold out
+between 1 and 10 fingers.\nThe winner of the round is decided based on the sum of fingers shown by
+both players, namely:\n- If the sum is an even number, the Evens player wins.\n- If the sum is an odd number, the Odds player wins.\n
+The winner of the round receives two points.\nIn addition, the player whose number of fingers is closer to the sum receives one extra point.\n
+The winner of the game is the first player who accumulates six points.""")
+
+    elif ans == 2:
+        # Starts the game
+        print("Let's Play")
+
+        if playerp >= 6:
+            print("You win!")
+            print("Computer Loses")
+            playerrod += 1
+            compp = 0
+            playerp = 0
+        
+        if compp >= 6:
+            print("You are a Sad sack loser")
+            print("Computer Dominates")
+            comprod += 1
+            compp = 0
+            playerp = 0
+
+        if compp == 6 and playerp == 6:
+            print("Y'all are tying. So cute!")
+            print("So no points")
+            compp = 0
+            playerp = 0
+
+        else:
+            # Main game
+            rounds += 1
+            print("Round", rounds)
+            choice = int(input("Would you like to be (1)Even or (2)Odd?: "))
+
+            while choice < 1 or choice > 2:
+                choice = int(input("Invalid choice. Would you like to be (1)Even or (2)Odd?: "))
+            
+            # Choose odd or even
+            if choice == 1:
+                print("You are the Even Player")
+            elif choice == 2:
+                print("You are the Odd Player")
+        
+            # Choose your fingers
+            player_fingers = int(input("Enter the number of fingers (1-10): "))
+            while player_fingers < 1 or player_fingers > 10:
+                player_fingers = int(input("Invalid number. Enter the number of fingers (1-10): "))
+        
+            # Computer finger generator
+            computer_fingers = random.randint(1, 10)
+        
+            # Calculate total fingers
+            total_fingers = player_fingers + computer_fingers
+            print("Your number is:", player_fingers, "\nComputer's number is:", computer_fingers, "\nTotal is:", total_fingers)
+        
+            # Determine winner of the round
+            if total_fingers % 2 == 0 and choice == 1:
+                print("Player Pookie (Evens) wins")
+                playerp += 2
+            elif total_fingers % 2 != 0 and choice == 1:
+                print("Computer Chan (Odds) wins")
+                compp += 2
+            elif total_fingers % 2 != 0 and choice == 2:
+                print("Player Pookie (Odds) wins")
+                playerp += 2
+            elif total_fingers % 2 == 0 and choice == 2:
+                print("Computer Chan (Evens) wins")
+                compp += 2
+            
+            # Award extra points for closest answer
+            if abs(total_fingers - player_fingers) < abs(total_fingers - computer_fingers):
+                playerp += 1
+                print("Extra point to Player Pookie!")
+            elif abs(total_fingers - player_fingers) > abs(total_fingers - computer_fingers):
+                compp += 1
+                print("Extra point to Computer Chan!")
+        
+            print("Player points:", playerp)
+            print("Computer points:", compp)
+
+    elif ans == 3:
+        # Show scores
+        print("The Scores Are In")
+        print("Player Pookie Points:", playerp)
+        print("Computer Champ Points:", compp)
+        print("Player Pookie Rounds:", playerrod)
+        print("Computer Champ Rounds:", comprod)
+
+    elif ans == 4:
+        # End game
+        print("Goodbye, Pookie!")
+
+    else:
+        print("Invalid choice. Please try again.")
+
+###########################################################
+
+# Start the game
+while ans != 4:
+    menu()
+    ans = int(input("Enter your choice: "))
+    command(ans)
